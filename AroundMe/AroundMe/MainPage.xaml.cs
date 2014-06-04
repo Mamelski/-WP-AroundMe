@@ -31,27 +31,51 @@ namespace AroundMe
 
         void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
+            SystemTray.ProgressIndicator = new ProgressIndicator();
+
             UpdateMap();
         }
 
+        private static void SetProggressIndicator(bool isVisible)
+        {
+            SystemTray.ProgressIndicator.IsIndeterminate = isVisible;
+            SystemTray.ProgressIndicator.IsVisible = isVisible;
+        }
         private async void UpdateMap()
         {
             Geolocator geolocator = new Geolocator();
             geolocator.DesiredAccuracyInMeters = 50;
 
-            Geoposition position =
-               await geolocator.GetGeopositionAsync(
-                TimeSpan.FromMinutes(1),
-                TimeSpan.FromSeconds(30));
+            SetProggressIndicator(true);
+            SystemTray.ProgressIndicator.Text = "Getting Gps Location";
 
-            var gpsCoorCenter = new GeoCoordinate(
-                position.Coordinate.Latitude,
-                position.Coordinate.Longitude);
+            try
+            {
+                Geoposition position =
+                              await geolocator.GetGeopositionAsync(
+                               TimeSpan.FromMinutes(1),
+                               TimeSpan.FromSeconds(30));
 
-            // AroundMeMap.SetView(gpsCoorCenter,17);
+                SystemTray.ProgressIndicator.Text = "Acquired";
+                var gpsCoorCenter = new GeoCoordinate(
+                    position.Coordinate.Latitude,
+                    position.Coordinate.Longitude);
 
-            AroundMeMap.Center = gpsCoorCenter;
-            AroundMeMap.ZoomLevel = 15;
+                AroundMeMap.Center = gpsCoorCenter;
+                AroundMeMap.ZoomLevel = 15;
+                SetProggressIndicator(false);
+            }
+            catch(UnauthorizedAccessException)
+            {
+                MessageBox.Show("Location is disabled in phone settings");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+           
+
+            
         }
 
         // Sample code for building a localized ApplicationBar
