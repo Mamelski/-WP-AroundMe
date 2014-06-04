@@ -14,6 +14,8 @@ namespace AroundMe
     {
         private double latitude;
         private double longitude;
+        private string topic;
+        private double radius;
 
         // Api Key (dostałem z Flickr.com
         private const string flickrApiKey = "b91a822cef0fe7a2cdf579a32a5c148f";
@@ -27,8 +29,10 @@ namespace AroundMe
         {
            // LocationTextBlock.Text = string.Format("location: {0} & {1}", latitude, longitude);
             var images = await FlickrImage.GetFlickrImages(flickrApiKey, 
+                topic,
                 latitude,
-                longitude);
+                longitude,
+                radius);
 
             DataContext = images;
         }
@@ -39,6 +43,8 @@ namespace AroundMe
 
             latitude = Convert.ToDouble(NavigationContext.QueryString["latitude"]);
             longitude = Convert.ToDouble(NavigationContext.QueryString["longitude"]);
+            topic = NavigationContext.QueryString["topic"];
+            radius = Convert.ToDouble(NavigationContext.QueryString["radius"]);
         }
     }
 }

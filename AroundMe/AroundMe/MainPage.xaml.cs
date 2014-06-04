@@ -74,9 +74,12 @@ namespace AroundMe
 
         private void SearchClick(object sender, EventArgs e)
         {
-            string navTo = string.Format("/SearchResult.xaml?latitude={0}&longitude={1}",
+            string topic = HttpUtility.UrlEncode(SearchTopic.Text);
+            string navTo = string.Format("/SearchResult.xaml?latitude={0}&longitude={1}&topic={2}&radius={3}",
                 AroundMeMap.Center.Latitude,
-                AroundMeMap.Center.Longitude);
+                AroundMeMap.Center.Longitude,
+                topic,
+                20);
             NavigationService.Navigate(new Uri(navTo, UriKind.RelativeOrAbsolute));
         }
     }    

@@ -15,16 +15,16 @@ namespace AroundMe
 
         public async static Task<List<FlickrImage>> GetFlickrImages(
             string flickrApiKey,
+            string topic,
             double latitude = double.NaN,
-            double longitude = double.NaN)
+            double longitude = double.NaN,
+            double radius = double.NaN)
         {
             HttpClient client = new HttpClient();
 
-            var baseUrl = getBaseUrl(flickrApiKey,latitude, longitude);
+            var baseUrl = getBaseUrl(flickrApiKey,topic,latitude, longitude,radius);
 
             string flickrResult = await client.GetStringAsync(baseUrl);
-
-            //ResultTextBlock.Text = flickrResult;
 
             FlickrData apiData = JsonConvert.DeserializeObject<FlickrData>(flickrResult);
 
@@ -55,8 +55,10 @@ namespace AroundMe
 
         private static string getBaseUrl(
             string flickrApiKey,
+            string topic,
             double latitude = double.NaN, 
-            double longitude = double.NaN)
+            double longitude = double.NaN,
+            double radius = double.NaN)
         {
             // Licenses
             //  https://www.flickr.com/services/api/flickr.photos.licenses.getInfo.html
@@ -74,21 +76,32 @@ namespace AroundMe
 
             string lat = latitude.ToString().Replace(",", ".");
             string lon = longitude.ToString().Replace(",", ".");
-
+            string rad = radius.ToString().Replace(",", ".");
             string url = "https://api.flickr.com/services/rest/" +
             "?method=flickr.photos.search" +
             "&license={0}" +
             "&api_key={1}" +
-            "&lat=" + lat +
-            "&lon=" + lon +
-            "&radius=20" +
             "&format=json" +
             "&nojsoncallback=1";
+
+
+            // TODO
 
             var baseUrl = string.Format(url,
                 license,
                 flickrApiKey);
 
+            if (!string.IsNullOrWhiteSpace(topic))
+            {
+                baseUrl += string.Format("&text=%22{0}%22", topic);
+            }
+
+            if(!double.IsNaN(latitude) && !double.IsNaN(longitude)){
+                baseUrl += string.Format("&lat={0}&lon={1}", lat, lon);
+            }
+            if(!double.IsNaN(radius)){
+                baseUrl += string.Format("&radius={0}",rad);
+            }
             return baseUrl;
         }
     }
