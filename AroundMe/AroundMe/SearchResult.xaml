@@ -6,6 +6,7 @@
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
@@ -28,17 +29,20 @@
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <phone:LongListSelector
+            
+            <toolkit:LongListMultiSelector
                LayoutMode="Grid"
                GridCellSize="105,105"
-               ItemsSource="{Binding}">
-                <phone:LongListSelector.ItemTemplate>
+               ItemsSource="{Binding}"
+               EnforceIsSelectionEnabled="True"
+               SelectionChanged="PhotosForLockscreen_SelectionChanged">
+                <toolkit:LongListMultiSelector.ItemTemplate>
                     <DataTemplate>
                         <Image Source="{Binding Image320}"
                            Stretch="UniformToFill" />
                     </DataTemplate>
-                </phone:LongListSelector.ItemTemplate>
-            </phone:LongListSelector>
+                </toolkit:LongListMultiSelector.ItemTemplate>
+            </toolkit:LongListMultiSelector>
         </Grid>
     </Grid>
 

@@ -46,5 +46,10 @@ namespace AroundMe
             topic = NavigationContext.QueryString["topic"];
             radius = Convert.ToDouble(NavigationContext.QueryString["radius"]);
         }
+
+        private void PhotosForLockscreen_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }
