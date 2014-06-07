@@ -37,6 +37,7 @@
                 Text="No photos found"/>
             
             <toolkit:LongListMultiSelector
+               Name="PhotosForLockscreen"
                LayoutMode="Grid"
                GridCellSize="105,105"
                ItemsSource="{Binding}"

@@ -24,6 +24,35 @@ namespace AroundMe
         {
             InitializeComponent();
             Loaded += SearchResults_Loaded;
+            BuildLocalizedApplicationBar();
+        }
+
+        // Sample code for building a localized ApplicationBar
+        private void BuildLocalizedApplicationBar()
+        {
+            // Set the page's ApplicationBar to a new instance of ApplicationBar.
+            ApplicationBar = new ApplicationBar();
+            ApplicationBar.IsVisible = false;
+            // Create a new button and set the text value to the localized string from AppResources.
+            ApplicationBarIconButton appBarButton =
+                new ApplicationBarIconButton(new Uri("/Toolkit.COntent/ApplicationBar.Check.png", UriKind.Relative));
+            appBarButton.Text = "Set";
+            appBarButton.Click += appBarButton_Click;
+            ApplicationBar.Buttons.Add(appBarButton);
+        }
+
+        void appBarButton_Click(object sender, EventArgs e)
+        {
+            List<FlickrImage> imgs = new List<FlickrImage>();
+            foreach (FlickrImage img in PhotosForLockscreen.SelectedItems)
+            {
+                imgs.Add(img);
+            }
+            LockScreenHeplers.CleanStorage();
+            LockScreenHeplers.SaveSelectedBackgroundScreens(imgs);
+            LockScreenHeplers.SetRandomImageFromLocakStorage();
+
+            MessageBox.Show("You have a new background!", "Set!", MessageBoxButton.OK);
         }
 
         protected async void SearchResults_Loaded(object sender, RoutedEventArgs e)
@@ -66,7 +95,14 @@ namespace AroundMe
 
         private void PhotosForLockscreen_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            if (PhotosForLockscreen.SelectedItems.Count == 0)
+            {
+                ApplicationBar.IsVisible = false;
+            }
+            else
+            {
+                ApplicationBar.IsVisible = true;
+            }
         }
 
         private void Image_ImageOpened(object sender, RoutedEventArgs e)

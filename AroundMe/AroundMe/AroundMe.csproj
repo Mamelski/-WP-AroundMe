@@ -95,6 +95,7 @@
     </Compile>
     <Compile Include="FlickrImage.cs" />
     <Compile Include="LocalizedStrings.cs" />
+    <Compile Include="LockScreenHeplers.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
